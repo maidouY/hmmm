@@ -118,10 +118,12 @@
             <el-table-column :formatter="difficultyListFMT" label="难度" prop="difficulty" ></el-table-column>
             <el-table-column label="录入人" prop="creator"></el-table-column>
             <el-table-column label="操作" width="200">
+              <template slot-scope="stData">
                 <a href="#">预览</a>
                 <a href="#">修改</a>
-                <a href="#">删除</a>
+                <a href="#" @click.prevent="del(stData.row)">删除</a>
                 <a href="#">加入精选</a>
+              </template>
             </el-table-column>
           </el-table>
       </el-card>
@@ -134,7 +136,7 @@ import {simple} from '@/api/hmmm/subjects.js'
 import {simple as tagsimple} from '@/api/hmmm/tags.js'
 import {simple as createsimple} from '@/api/base/users.js'
 import {provinces, citys} from '@/api/hmmm/citys.js'
-import {list} from '@/api/hmmm/questions.js'
+import {list, remove} from '@/api/hmmm/questions.js'
 import {
   difficulty as difficultyList,
   questionType as questionTypeList,
@@ -185,6 +187,25 @@ export default {
   methods: {
     provinces,
     citys,
+    del(question) {
+      this.$confirm('确定删除该试题吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          let res = await remove(question)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.getquestionsList()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })          
+        })     
+    },
     questionTypeListFMT(row, column, cellValue, index) {
     // row:代表当前每个数据项记录信息的，是一个对象，{id:xxx,number:xx,difficulty:xx,addDate:xx……}
     //     可以通过这个row访问到当前任何数据项目记录信息,调用形式：row.id  row.number
