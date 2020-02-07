@@ -3,8 +3,8 @@
     <div class="app-container">
       <el-card class="box-card">
         <el-row>
-          <el-button type="info" plain size="small">新增试题</el-button>
-          <el-button type="info" plain size="small">批量导入</el-button>
+          <el-button type="info" plain size="small">{{$t('question.newadd')}}</el-button>
+          <el-button type="info" plain size="small">{{$t('question.manyadd')}}</el-button>
         </el-row>
           <el-row :gutter="20">
             <el-col :span="6">学科：
@@ -130,6 +130,15 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="searchForm.page"
+            :page-sizes="[3, 5, 7, 10]"
+            :page-size="100"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tot">
+          </el-pagination>
       </el-card>
     </div>
   </div>
@@ -163,7 +172,9 @@ export default {
        shortName: '',
        direction: '',
        creatorID: '',
-       catalogID: ''
+       catalogID: '',
+       page: 1,
+       pagesize: 5
      },
      subjectList: [],
      difficultyList,
@@ -171,7 +182,8 @@ export default {
      tagNameList: [],
      directionList,
      createList: [],
-     questionsList: []
+     questionsList: [],
+     tot: 0
     }
   },
   watch: {
@@ -191,6 +203,14 @@ export default {
   methods: {
     provinces,
     citys,
+     handleSizeChange(val) {
+        // console.log(`每页 ${val} 条`)
+        this.searchForm.pagesize = val
+      },
+      handleCurrentChange(val) {
+        // console.log(`当前页: ${val}`)
+        this.searchForm.page = val
+      },
     del(question) {
       this.$confirm('确定删除该试题吗?', '提示', {
           confirmButtonText: '确定',
@@ -223,8 +243,9 @@ export default {
     },
     // 获取基础题库列表
     async getquestionsList() {
-      let res = await list(this.searchForm)
+      let res = await list(this.searchForm) 
       this.questionsList = res.data.items   
+      this.tot = res.data.counts
     },
     // 获取录入人
     async getcreateList() {
@@ -258,5 +279,8 @@ export default {
 }
 .el-table {
  margin-top: 25px;
+}
+.el-pagination{
+  margin-top:15px;
 }
 </style>

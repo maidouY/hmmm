@@ -86,19 +86,35 @@
           <el-form-item label="题干：">
             <el-input type="textarea" v-model="addForm.question"></el-input>
           </el-form-item>
-          <el-form-item label="选项：" >
-            <el-radio :label="0" v-model="singleSelect">
-              A: <el-input type="text" class="xx" v-model="addForm.options[0]['title']"></el-input>
-            </el-radio><br />
-            <el-radio :label="1" v-model="singleSelect">
-              B: <el-input type="text" class="xx" v-model="addForm.options[1]['title']"></el-input>
-            </el-radio><br />
-            <el-radio :label="2" v-model="singleSelect">
-              C: <el-input type="text" class="xx" v-model="addForm.options[2]['title']"></el-input>
-            </el-radio><br />
-            <el-radio :label="3" v-model="singleSelect">
-              D: <el-input type="text" v-model="addForm.options[3]['title']" ></el-input>
-            </el-radio>
+          <el-form-item label="选项：" v-if="anyShow">
+            <template v-if="radioShow">
+              <el-radio :label="0" v-model="singleSelect">
+                A: <el-input type="text" class="xx" v-model="addForm.options[0]['title']"></el-input>
+              </el-radio><br />
+              <el-radio :label="1" v-model="singleSelect">
+                B: <el-input type="text" class="xx" v-model="addForm.options[1]['title']"></el-input>
+              </el-radio><br />
+              <el-radio :label="2" v-model="singleSelect">
+                C: <el-input type="text" class="xx" v-model="addForm.options[2]['title']"></el-input>
+              </el-radio><br />
+              <el-radio :label="3" v-model="singleSelect">
+                D: <el-input type="text" v-model="addForm.options[3]['title']" ></el-input>
+              </el-radio>
+            </template>
+            <template v-else>
+              <el-checkbox v-model="addForm.options[0].isRight">
+                A: <el-input type="text" class="xx" v-model="addForm.options[0]['title']"></el-input>
+              </el-checkbox><br />
+              <el-checkbox v-model="addForm.options[1].isRight">
+                B: <el-input type="text" class="xx" v-model="addForm.options[1]['title']"></el-input>
+              </el-checkbox><br />
+              <el-checkbox v-model="addForm.options[2].isRight">
+                C: <el-input type="text" class="xx" v-model="addForm.options[2]['title']"></el-input>
+              </el-checkbox><br />
+              <el-checkbox v-model="addForm.options[3].isRight">
+                D: <el-input type="text" v-model="addForm.options[3]['title']" ></el-input>
+              </el-checkbox>
+            </template>
           </el-form-item>
           <el-form-item label="答案：">
             <el-input type="textarea" v-model="addForm.answer"></el-input>
@@ -161,10 +177,23 @@ export default {
       directionList,
       questionTypeList,
       difficultyList,
-      singleSelect: ''
+      singleSelect: '',
+      radioShow: true, // 默认显示单选项目
+      anyShow: true // 单选或多选默认显示一个
     }
   },
   watch: {
+    'addForm.questionType': function(newV) {
+      if (newV === '1') {
+        this.anyShow = true
+        this.radioShow = true
+      } else if (newV === '2') {
+        this.anyShow = true
+        this.radioShow = false
+      } else {
+        this.anyShow = false
+      }
+    },
     singleSelect(newV) {
       for (var i = 0; i < 4; i++) {
         this.addForm.options[i].isRight = false
