@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="app-container">
       <el-card class="box-card">
-        <el-row :gutter="20">
+        <el-row>
           <el-button type="info" plain size="small">新增试题</el-button>
           <el-button type="info" plain size="small">批量导入</el-button>
         </el-row>

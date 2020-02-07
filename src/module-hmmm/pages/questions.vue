@@ -2,6 +2,10 @@
   <div class="dashboard-container">
     <div class="app-container">
       <el-card class="box-card">
+        <el-row>
+          <el-button type="info" plain size="small">新增试题</el-button>
+          <el-button type="info" plain size="small">批量导入</el-button>
+        </el-row>
           <el-row :gutter="20">
             <el-col :span="6">学科：
               <el-select v-model="searchForm.subjectID" placeholder="请选择" class="wd">
@@ -102,8 +106,8 @@
               </el-input>
             </el-col>
             <el-col :span="6">
-              <el-button type="primary" size="small">搜 索</el-button>
-              <el-button size="small">清 除</el-button>
+              <el-button type="primary" size="small" class="btn">搜 索</el-button>
+              <el-button size="small" class="btn">清 除</el-button>
             </el-col>
           </el-row>
           <el-table :data="questionsList" style="width:100%">
@@ -248,7 +252,7 @@ export default {
 .el-row{
   margin-bottom: 10px;
 }
-.el-button{
+.btn{
   float: right;
   margin-right: 17px;
 }
